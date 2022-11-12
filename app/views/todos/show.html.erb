@@ -1,0 +1,60 @@
+<p style="color: green"><%= notice %></p>
+
+<h1 class="title">Nome da Tarefa: <%= @todo.name %></h1>
+
+<p>Lista de Tarefas:</p>
+
+<% @tasks.each do |task| %>
+  
+  <% if task.done == true %>
+    <strike>
+      <p class="mtp">
+        <strong> <%= task.title %> </strong>
+      </p>
+    </strike>
+
+    <%= form_for task do |f| %>
+      <%= f.check_box :done, :value => task.done, class: "checkbox" %>
+      <%= f.submit "Undo", class: "button is-link is-light" %>
+    <% end %>
+
+  <% elsif task.done == false %>
+    <p>
+      <strong> <%= task.title %> </strong>
+    </p>
+    <%= form_for task do |f| %>
+      <div class="dflex">
+        <%= f.check_box :done, :value => task.done, class: "checkbox" %>
+        <%= f.submit "Done", class: "button is-dark" %>
+        <%= button_to "Delete", @task, method: :delete, class: "button is-primary" %>
+      </div>
+    <% end %>
+  <% end %>
+
+<% end %>
+
+
+<%= form_for @task do |f| %>
+  <div class="container is-flex">
+    <p><%= f.text_field :title, class: 'input is-warning mt-5' %></p>
+
+    <%= f.hidden_field :done, :value => false %>
+    <%= f.hidden_field :todo_id, :value => @todo.id %>
+
+    <%= f.submit "Add task", class: "button is-link is-light" %>  
+  </div>
+<% end %>
+
+<div class="container">
+  <%= link_to "Edit this todo", edit_todo_path(@todo) %> |
+  <%= link_to "Back to todos", todos_path %>
+
+  <%= button_to "Destroy this todo",
+    @todo, 
+    method: :delete, 
+    data: {
+      confirm: 'are u sure?'
+    },
+    class: 'button is-danger mt-2'
+  %>
+</div>
